@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.rawgit.com/konvajs/konva/2.0.2/konva.min.js"></script>
+    <meta charset="utf-8">
+    <title>assignment</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    Enter Size
+    <input type="text" name="size of circle" id="ip1">
+    <button onclick="fun2()">draw rect</button>
+    
+    <button onclick="fun()">draw circle</button>
+    <div id="container"></div>
+
+    <script>
+        var xc;
+        var yc;
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        var stage = new Konva.Stage({
+            container: 'container',
+            width: width,
+            height: height
+        });
+
+        function fun() {
+            var r = document.getElementById("ip1").value;
+            var layer = new Konva.Layer();
+            var circle = new Konva.Circle({
+                x: stage.getWidth() / 2,
+                y: stage.getHeight() / 2,
+                radius: r / 4,
+                stroke: 'black',
+                strokeWidth: 4,
+                draggable: true
+            });
+            stage.on("dragend", function (e) {
+                e.target.fill('white');
+                layer.draw();
+            });
+            // add the shape to the layer
+            layer.add(circle);
+            // add the layer to the stage
+            stage.add(layer);
+        }
+
+        function fun2() {
+            var r = document.getElementById("ip1").value;
+            var layer = new Konva.Layer();
+            var rectX = stage.getWidth() / 2 - 400;
+            var rectY = stage.getHeight() / 2 - 50;
+
+            var box = new Konva.Rect({
+                x: rectX,
+                y: rectY,
+                width: r,
+                height: r,
+                strokeScaleEnabled: true,
+                stroke: 'black',
+                strokeWidth: 4,
+                draggable: true
+            });
+            box.on('click', function () {
+                var pos = box.getAbsolutePosition();
+                xc = pos.x;
+                yc = pos.y;
+                for (var j = 0; j < r; j = j + 30)
+                    for (var i = 0; i < r; i = i + 30) {
+                        var box1 = new Konva.Rect({
+                            x: xc + i,
+                            y: yc + j,
+                            width: 20,
+                            height: 20,
+                            fill: 'black',
+                            stroke: 'black',
+                            strokeWidth: 4,
+                        });
+                        layer.add(box1);
+                    }
+                var draggable = box.draggable();
+                // enable drag and drop
+                box.draggable(false);
+                layer.draw();
+            });
+            box.on("drop", function (e) {
+                e.target.fill('white');
+                var draggable = box.draggable();
+                // enable drag and drop
+                box.draggable(false);
+                layer.draw();
+            });
+            stage.on("dragend", function (e) {
+                var pos = box.getAbsolutePosition();
+                xc = pos.x;
+                yc = pos.y;
+                for (var j = 0; j < r; j = j + 30)
+                    for (var i = 0; i < r; i = i + 30) {
+                        var box1 = new Konva.Rect({
+                            x: xc + i,
+                            y: yc + j,
+                            width: 20,
+                            height: 20,
+                            fill: 'black',
+                            stroke: 'black',
+                            strokeWidth: 4,
+                        });
+                        layer.add(box1);
+                    }
+                e.target.fill('white');
+                var draggable = box.draggable();
+
+                // disable drag and drop
+                box.draggable(false);
+                layer.draw();
+            });
+            layer.add(box);
+            // add the layer to the stage
+            stage.add(layer);
+        }
+    </script>
+</body>
+</html>
